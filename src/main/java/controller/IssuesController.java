@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import issue.IssueDao;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,37 +28,26 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import issue.Issue;
-import org.jdbi.v3.core.Handle;
-import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.sqlobject.SqlObjectPlugin;
+import lombok.extern.slf4j.Slf4j;
 
+import com.google.common.collect.Lists;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import guice.PersistenceModule;
+
+@Slf4j
 public class IssuesController implements Initializable {
-
-    Jdbi jdbi = Jdbi.create("jdbc:h2:mem:test");
-    jdbi.installPlugin(new SqlObjectPlugin());
-
-    // TODO ObservableList
-    private final List<Issue> data = jdbi.withExtension(IssueDao.class, dao -> {
-        dao.createTable();
-        dao.insertIssue(new Issue(1, "First issue", "Issue detail"));
-        dao.insertIssue(new Issue(1, "Second issue", "Issue detail"));
-        dao.insertIssue(new Issue(1, "Merge bugfix", "Merge detail"));
-        //System.out.println(dao.getIssue("75211").get());
-        dao.listIssues().stream().forEach(System.out::println);
-
-        return dao.listIssues();
-    });
-
     // Egy lista, ami objektumot tárol
-    // POJO (Issue objektumok)
-    /*
-    private final ObservableList<Issue> data =
-        FXCollections.observableArrayList(
-                new Issue(1, "First issue", "Issue detail"),
-                new Issue(1, "Second issue", "Issue detail"),
-                new Issue(1, "Merge bugfix", "Merge detail")
-        );
-     */
+    // POJO (Issue objektumok
+    private ObservableList<Issue> data = FXCollections.observableArrayList();
+
+    private final String MENU_ISSUES = "Issues";
+    private final String MENU_LIST = "List";
+    private final String MENU_EXPORT = "Export";
+    private final String MENU_EXIT = "Exit";
+
+    private IssueDao issueDao;
 
     @FXML
     TableView table;
@@ -77,11 +68,33 @@ public class IssuesController implements Initializable {
     @FXML
     Button exportButton;
 
-    private final String MENU_ISSUES = "Issues";
-    private final String MENU_LIST = "List";
-    private final String MENU_EXPORT = "Export";
-    private final String MENU_EXIT = "Exit";
 
+    private Issue createIssue() {
+        return new Issue(1, "First issue", "Issue detail");
+    }
+
+    /**
+     * Connect to the DB and create an issue.
+     * @return
+     */
+    private void initDB() {
+        Injector injector = Guice.createInjector(new PersistenceModule("jpa-persistence-unit-1"));
+        IssueDao issueDao = injector.getInstance(IssueDao.class);
+        Issue issue = createIssue();
+        issueDao.persist(issue);
+        data.add(issue);
+    }
+
+    /**
+     * Connect to the DB and read the values.
+     * @return
+     */
+    private void readFromDB() {
+        Injector injector = Guice.createInjector(new PersistenceModule("jpa-persistence-unit-1"));
+        IssueDao issueDao = injector.getInstance(IssueDao.class);
+        // ArrayList cast to ObservalbeList
+        data = FXCollections.observableArrayList(issueDao.findAll());
+    }
 
     /**
      * Initialize the issues table data
@@ -153,21 +166,16 @@ public class IssuesController implements Initializable {
                 //System.out.println(selectedMenu);
 
                 if (null != selectedMenu) {
-                    switch (selectedMenu) {
-                        case MENU_ISSUES:
-                            selectedItem.setExpanded(true);
-                            break;
-                        case MENU_LIST:
-                            exportPane.setVisible(false);
-                            issuePane.setVisible(true);
-                            break;
-                        case MENU_EXPORT:
-                            issuePane.setVisible(false);
-                            exportPane.setVisible(true);
-                            break;
-                        case MENU_EXIT:
-                            System.exit(0);
-                            break;
+                    if (selectedMenu == MENU_ISSUES) {
+                        selectedItem.setExpanded(true);
+                    } else if(selectedMenu ==  MENU_LIST) {
+                        exportPane.setVisible(false);
+                        issuePane.setVisible(true);
+                    } else if(selectedMenu ==  MENU_EXPORT) {
+                        issuePane.setVisible(false);
+                        exportPane.setVisible(true);
+                    } else if(selectedMenu ==  MENU_EXIT) {
+                        System.exit(0);
                     }
                 }
             }
@@ -178,6 +186,15 @@ public class IssuesController implements Initializable {
     @FXML
     private void saveIssue(ActionEvent event) {
         if (inputTitle.getText().length() > 3 &&  inputDetails.getText().length() > 3) {
+            // Mentjük az adatbázisba
+            Injector injector = Guice.createInjector(new PersistenceModule("jpa-persistence-unit-1"));
+            IssueDao issueDao = injector.getInstance(IssueDao.class);
+            issueDao.persist(new Issue(
+                    1,
+                    inputTitle.getText(),
+                    inputDetails.getText()
+            ));
+
             // Hozzáadjuk az ObservableList-hez
             data.add(new Issue(
                     1,
@@ -191,6 +208,10 @@ public class IssuesController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //issueDao = IssueDao.getInstance();
+
+        initDB();
+        readFromDB();
         setTableData();
         setMenuData();
     }

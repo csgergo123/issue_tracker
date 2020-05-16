@@ -1,38 +1,59 @@
 package issue;
 
 import javafx.beans.property.SimpleStringProperty;
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
+
+import javax.persistence.*;
 
 /** Represents an issue.
- * @author Csipkée Gergo
+ * @author Csipkes Gergo
  * @author csipkesgeri@gmail.com
  * @version 0.1
  */
+@Data
+@SuperBuilder
+@Entity
+@Inheritance(strategy= InheritanceType.TABLE_PER_CLASS)
 public class Issue {
+
+    @GeneratedValue
+    @Id
     private int id;
+
+    @Column(nullable=false)
     private int createdBy;
     // Azok a POJO-k amik SimpleStringProperty-vel rendelkeznek, ezek lesznek képesek kommunikálni az adatbázis táblával
-    private final SimpleStringProperty title;
-    private final SimpleStringProperty details;
-    private final SimpleStringProperty dateCreated;
-    private final SimpleStringProperty dateFinished;
+
+    @Column(nullable=false)
+    private String title;
+
+    @Column(nullable=false)
+    private String details;
+
+    @Column(nullable=false)
+    private String dateCreated;
+
+    @Column(nullable=true)
+    private String dateFinished;
 
     public Issue() {
         this.createdBy = 1;
-        this.title = new SimpleStringProperty("");
-        this.details = new SimpleStringProperty("");
-        this.dateCreated = new SimpleStringProperty("");
-        this.dateFinished = new SimpleStringProperty("");
+        this.title = "";
+        this.details = "";
+        this.dateCreated = "";
+        this.dateFinished = "";
     }
 
     public Issue(int createdBy, String title, String details) {
         this.createdBy = createdBy;
-        this.title = new SimpleStringProperty(title);
-        this.details = new SimpleStringProperty(details);
+        this.title = title;
+        this.details = details;
         // MySQL Datetime format
         java.util.Date dt = new java.util.Date();
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        this.dateCreated = new SimpleStringProperty(sdf.format(dt));
-        this.dateFinished = new SimpleStringProperty("");
+        this.dateCreated = sdf.format(dt);
     }
 
     /**
@@ -72,7 +93,7 @@ public class Issue {
      * @return A string with the Issue's title.
      */
     public String getTitle() {
-        return title.get();
+        return title;
     }
 
     /**
@@ -80,7 +101,7 @@ public class Issue {
      * @param title A string with the Issue's title.
      */
     public void setTitle(String title) {
-        this.title.set(title);
+        this.title = title;
     }
 
     /**
@@ -88,7 +109,7 @@ public class Issue {
      * @return A string with the Issue's details.
      */
     public String getDetails() {
-        return details.get();
+        return details;
     }
 
     /**
@@ -96,7 +117,7 @@ public class Issue {
      * @param details A string with the Issue's details.
      */
     public void setDetails(String details) {
-        this.details.set(details);
+        this.details = details;
     }
 
     /**
@@ -104,7 +125,7 @@ public class Issue {
      * @return A string with the Issue's creation time.
      */
     public String getDateCreated() {
-        return dateCreated.get();
+        return dateCreated;
     }
 
     /**
@@ -112,7 +133,7 @@ public class Issue {
      * @param dateCreated A string with the Issue's creation time.
      */
     public void setDateCreated(String dateCreated) {
-        this.dateCreated.set(dateCreated);
+        this.dateCreated = dateCreated;
     }
 
     /**
@@ -120,7 +141,7 @@ public class Issue {
      * @return A string with the Issue's completion time.
      */
     public String getDateFinished() {
-        return dateFinished.get();
+        return dateFinished;
     }
 
     /**
@@ -128,7 +149,7 @@ public class Issue {
      * @param dateFinished A string with the Issue's completion time.
      */
     public void setDateFinished(String dateFinished) {
-        this.dateFinished.set(dateFinished);
+        this.dateFinished = dateFinished;
     }
 
 
