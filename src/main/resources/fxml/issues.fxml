@@ -10,14 +10,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IssuesController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IssuesController">
     <children>
-        <Label layoutX="383.0" layoutY="14.0" text="Issues" textFill="#002366">
+        <Label layoutX="560.0" layoutY="14.0" text="Issues" textFill="#002366">
             <font>
                 <Font name="MathJax_Main-Bold" size="36.0" />
             </font>
         </Label>
-        <SplitPane dividerPositions="0.2230320699708455" layoutY="68.0" prefHeight="691.0" prefWidth="860.0">
+        <SplitPane dividerPositions="0.2230320699708455" layoutY="68.0" prefHeight="691.0" prefWidth="1215.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
@@ -28,7 +28,7 @@
                     <children>
                         <StackPane layoutX="14.0" layoutY="171.0" prefHeight="689.0" prefWidth="530.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <Pane id="exportPane" fx:id="exportPane" prefHeight="689.0" prefWidth="655.0" visible="false">
+                                <Pane id="unfinishedPane" fx:id="unfinishedPane" prefHeight="689.0" prefWidth="655.0" visible="false">
                            <children>
                               <Button id="exportButton" fx:id="exportButton" layoutX="210.0" layoutY="307.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="110.0" text="Save PDF" />
                               <TextField id="inputExport" fx:id="inputExport" layoutX="158.0" layoutY="258.0" prefHeight="25.0" prefWidth="214.0" />
@@ -36,7 +36,7 @@
                         </Pane>
                                 <Pane id="issuePane" fx:id="issuePane" prefHeight="635.0" prefWidth="647.0">
                                     <children>
-                                        <TableView id="table" fx:id="table" editable="true" prefHeight="501.0" prefWidth="664.0">
+                                        <TableView id="table" fx:id="table" editable="true" prefHeight="501.0" prefWidth="939.0">
                                             <columns>
                                             </columns>
                                         </TableView>

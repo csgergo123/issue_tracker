@@ -43,8 +43,8 @@ public class IssuesController implements Initializable {
     private ObservableList<Issue> data = FXCollections.observableArrayList();
 
     private final String MENU_ISSUES = "Issues";
-    private final String MENU_LIST = "List";
-    private final String MENU_EXPORT = "Export";
+    private final String MENU_LIST = "All issues";
+    private final String MENU_UNFINISHED = "Unfinihed issues";
     private final String MENU_EXIT = "Exit";
 
     private IssueDao issueDao;
@@ -62,7 +62,7 @@ public class IssuesController implements Initializable {
     @FXML
     Pane issuePane;
     @FXML
-    Pane exportPane;
+    Pane unfinishedPane;
     @FXML
     TextField inputExport;
     @FXML
@@ -83,6 +83,7 @@ public class IssuesController implements Initializable {
         Issue issue = createIssue();
         issueDao.persist(issue);
         data.add(issue);
+        log.info("A new issue is save to the database" + issue);
     }
 
     /**
@@ -126,7 +127,35 @@ public class IssuesController implements Initializable {
                 ).setDetails(t.getNewValue())
         );
 
-        table.getColumns().addAll(titleCol, detailsCol);
+        TableColumn dateCreatedCol = new TableColumn("Date created");
+        dateCreatedCol.setMinWidth(150);
+        // Ebben az oszlopban minden cellának textfield legyen a tartalma
+        dateCreatedCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        // PropertyValueFactory<POJO neve, milyen típussal jelenítsük meg az értéket, amit ki akarunk venni>("milyen néven találja az értéket")
+        dateCreatedCol.setCellValueFactory(new PropertyValueFactory<Issue, String>("dateCreated"));
+
+        // Táblázatban a címre kattintva módoítva mi történjen
+        dateCreatedCol.setOnEditCommit(
+                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> ((Issue) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setTitle(t.getNewValue())
+        );
+
+        TableColumn dateFinishedCol = new TableColumn("Date finished");
+        dateFinishedCol.setMinWidth(150);
+        // Ebben az oszlopban minden cellának textfield legyen a tartalma
+        dateFinishedCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        // PropertyValueFactory<POJO neve, milyen típussal jelenítsük meg az értéket, amit ki akarunk venni>("milyen néven találja az értéket")
+        dateFinishedCol.setCellValueFactory(new PropertyValueFactory<Issue, String>("dateFinished"));
+
+        // Táblázatban a címre kattintva módoítva mi történjen
+        dateFinishedCol.setOnEditCommit(
+                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> ((Issue) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setTitle(t.getNewValue())
+        );
+
+        table.getColumns().addAll(titleCol, detailsCol, dateCreatedCol, dateFinishedCol);
         table.setItems(data);
     }
 
@@ -145,10 +174,10 @@ public class IssuesController implements Initializable {
         nodeItemA.setExpanded(true);
 
         Node issuesNode = new ImageView(new Image(getClass().getResourceAsStream("/img/icons/list.png")));
-        Node exportNode = new ImageView(new Image(getClass().getResourceAsStream("/img/icons/export.png")));
+        Node unfinishedNode = new ImageView(new Image(getClass().getResourceAsStream("/img/icons/unfinished.png")));
 
         TreeItem<String> nodeItemA1 = new TreeItem<>(MENU_LIST, issuesNode);
-        TreeItem<String> nodeItemB1 = new TreeItem<>(MENU_EXPORT, exportNode);
+        TreeItem<String> nodeItemB1 = new TreeItem<>(MENU_UNFINISHED, unfinishedNode);
 
         nodeItemA.getChildren().addAll(nodeItemA1, nodeItemB1);
         treeItemRoot1.getChildren().addAll(nodeItemA, nodeItemB);
@@ -169,11 +198,11 @@ public class IssuesController implements Initializable {
                     if (selectedMenu == MENU_ISSUES) {
                         selectedItem.setExpanded(true);
                     } else if(selectedMenu ==  MENU_LIST) {
-                        exportPane.setVisible(false);
+                        unfinishedPane.setVisible(false);
                         issuePane.setVisible(true);
-                    } else if(selectedMenu ==  MENU_EXPORT) {
+                    } else if(selectedMenu ==  MENU_UNFINISHED) {
                         issuePane.setVisible(false);
-                        exportPane.setVisible(true);
+                        unfinishedPane.setVisible(true);
                     } else if(selectedMenu ==  MENU_EXIT) {
                         System.exit(0);
                     }
@@ -185,24 +214,26 @@ public class IssuesController implements Initializable {
 
     @FXML
     private void saveIssue(ActionEvent event) {
-        if (inputTitle.getText().length() > 3 &&  inputDetails.getText().length() > 3) {
-            // Mentjük az adatbázisba
-            Injector injector = Guice.createInjector(new PersistenceModule("jpa-persistence-unit-1"));
-            IssueDao issueDao = injector.getInstance(IssueDao.class);
-            issueDao.persist(new Issue(
-                    1,
-                    inputTitle.getText(),
-                    inputDetails.getText()
-            ));
+        try {
+            if (inputTitle.getText().length() > 3 &&  inputDetails.getText().length() > 3) {
+                // Mentjük az adatbázisba
+                Injector injector = Guice.createInjector(new PersistenceModule("jpa-persistence-unit-1"));
+                IssueDao issueDao = injector.getInstance(IssueDao.class);
+                Issue issue = new Issue(
+                        1,
+                        inputTitle.getText(),
+                        inputDetails.getText()
+                );
+                issueDao.persist(issue);
+                log.info("A new issue is save to the database" + issue);
 
-            // Hozzáadjuk az ObservableList-hez
-            data.add(new Issue(
-                    1,
-                    inputTitle.getText(),
-                    inputDetails.getText()
-            ));
-            inputTitle.clear();
-            inputDetails.clear();
+                // Hozzáadjuk az ObservableList-hez
+                data.add(issue);
+                inputTitle.clear();
+                inputDetails.clear();
+            }
+        } catch(Exception ex) {
+            log.error("Failed to save issue to database.");
         }
     }
 
@@ -210,7 +241,7 @@ public class IssuesController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //issueDao = IssueDao.getInstance();
 
-        initDB();
+        //initDB();
         readFromDB();
         setTableData();
         setMenuData();
