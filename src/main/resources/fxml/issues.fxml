@@ -21,30 +21,40 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <StackPane id="menuPane" fx:id="menuPane" layoutX="-50.0" layoutY="172.0" prefHeight="689.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <StackPane id="menuPane" fx:id="menuPane" prefHeight="689.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     </children>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="689.0" prefWidth="647.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="498.0" prefWidth="939.0">
                     <children>
-                        <StackPane layoutX="14.0" layoutY="171.0" prefHeight="689.0" prefWidth="530.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <StackPane layoutX="14.0" layoutY="171.0" prefHeight="691.0" prefWidth="939.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <Pane id="unfinishedPane" fx:id="unfinishedPane" prefHeight="689.0" prefWidth="655.0" visible="false">
-                           <children>
-                              <Button id="exportButton" fx:id="exportButton" layoutX="210.0" layoutY="307.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="110.0" text="Save PDF" />
-                              <TextField id="inputExport" fx:id="inputExport" layoutX="158.0" layoutY="258.0" prefHeight="25.0" prefWidth="214.0" />
-                           </children>
-                        </Pane>
-                                <Pane id="issuePane" fx:id="issuePane" prefHeight="635.0" prefWidth="647.0">
+                                <Pane id="newIssuePane" fx:id="newIssuePane" prefHeight="571.0" prefWidth="939.0">
                                     <children>
-                                        <TableView id="table" fx:id="table" editable="true" prefHeight="501.0" prefWidth="939.0">
-                                            <columns>
-                                            </columns>
-                                        </TableView>
                                         <TextField id="inputTitle" fx:id="inputTitle" layoutX="159.0" layoutY="524.0" prefHeight="25.0" prefWidth="287.0" promptText="Merge bugfix" />
                                         <TextArea id="inputDetails" fx:id="inputDetails" layoutX="159.0" layoutY="565.0" prefHeight="77.0" prefWidth="287.0" promptText="When you click the merge button the db connection ..." />
                                         <Label alignment="CENTER_RIGHT" layoutX="53.0" layoutY="528.0" prefHeight="17.0" prefWidth="36.0" text="Title" />
                                         <Label alignment="CENTER_RIGHT" layoutX="53.0" layoutY="565.0" text="Details" />
                                         <Button id="saveIssueButton" fx:id="saveIssueButton" layoutX="504.0" layoutY="585.0" mnemonicParsing="false" onAction="#saveIssue" prefHeight="38.0" prefWidth="71.0" text="Save" />
+                                    </children>
+                                </Pane>
+                            </children>
+                        </StackPane>
+                        <StackPane layoutX="14.0" layoutY="171.0" prefHeight="501.0" prefWidth="939.0" AnchorPane.bottomAnchor="188.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Pane id="unfinishedIssuePane" fx:id="unfinishedIssuePane" prefHeight="689.0" prefWidth="655.0" visible="false">
+                                    <children>
+                                        <TableView id="unfinishedIssueTable" fx:id="unfinishedIssueTable" editable="true" prefHeight="501.0" prefWidth="939.0">
+                                            <columns>
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </Pane>
+                                <Pane id="allIssuePane" fx:id="allIssuePane" prefHeight="635.0" prefWidth="647.0">
+                                    <children>
+                                        <TableView id="allIssueTable" fx:id="allIssueTable" editable="true" prefHeight="501.0" prefWidth="939.0">
+                                            <columns>
+                                            </columns>
+                                        </TableView>
                                     </children>
                                 </Pane>
                             </children>
