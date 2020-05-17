@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -20,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
@@ -36,71 +38,117 @@ import com.google.inject.Injector;
 
 import guice.PersistenceModule;
 
+import javax.persistence.PersistenceException;
+
+/**
+ * @author Csipkés Gergő
+ * @email csipkesgeri@gmail.com
+ * @version 0.2
+ *
+ * This class is the controller of the {@link Issue} and the {@code issues.xml}.
+ */
 @Slf4j
 public class IssuesController implements Initializable {
     // Egy lista, ami objektumot tárol
     // POJO (Issue objektumok
+    /**
+     * An ObservableList contains the {@link Issue}s.
+     */
     private ObservableList<Issue> data = FXCollections.observableArrayList();
 
     private final String MENU_ISSUES = "Issues";
     private final String MENU_LIST = "All issues";
-    private final String MENU_UNFINISHED = "Unfinihed issues";
+    private final String MENU_UNFINISHED = "Unfinished issues";
     private final String MENU_EXIT = "Exit";
 
-    private IssueDao issueDao;
+    //private IssueDao issueDao;
+    Injector injector = Guice.createInjector(new PersistenceModule("jpa-persistence-unit-1"));
+    IssueDao issueDao = injector.getInstance(IssueDao.class);
 
     @FXML
-    TableView table;
+    StackPane menuPane;
+
+    @FXML
+    Pane unfinishedIssuePane;
+    @FXML
+    TableView unfinishedIssueTable;
+
+    @FXML
+    Pane allIssuePane;
+    @FXML
+    TableView allIssueTable;
+
     @FXML
     TextField inputTitle;
     @FXML
     TextArea inputDetails;
     @FXML
     Button saveIssueButton;
-    @FXML
-    StackPane menuPane;
-    @FXML
-    Pane issuePane;
-    @FXML
-    Pane unfinishedPane;
-    @FXML
-    TextField inputExport;
-    @FXML
-    Button exportButton;
 
-
+    /**
+     * This function is for test purpose.
+     * Create a predefined {@code issue}.
+     *
+     * @return Issue A predefined {@code issue}.
+     */
     private Issue createIssue() {
         return new Issue(1, "First issue", "Issue detail");
     }
 
     /**
+     * This function is for test purpose.
      * Connect to the DB and create an issue.
+     *
      * @return
      */
     private void initDB() {
-        Injector injector = Guice.createInjector(new PersistenceModule("jpa-persistence-unit-1"));
-        IssueDao issueDao = injector.getInstance(IssueDao.class);
         Issue issue = createIssue();
+        issueDao.persist(issue);
+        issueDao.persist(issue);
         issueDao.persist(issue);
         data.add(issue);
         log.info("A new issue is save to the database" + issue);
     }
 
     /**
-     * Connect to the DB and read the values.
+     * Connect to the DB and get all issues.
+     *
      * @return
      */
-    private void readFromDB() {
-        Injector injector = Guice.createInjector(new PersistenceModule("jpa-persistence-unit-1"));
-        IssueDao issueDao = injector.getInstance(IssueDao.class);
-        // ArrayList cast to ObservalbeList
-        data = FXCollections.observableArrayList(issueDao.findAll());
+    private void getAllIssuesFromDB() {
+        try {
+            // ArrayList cast to ObservalbeList
+            data = FXCollections.observableArrayList(issueDao.findAll());
+            log.debug("Get all issues from DB" + data);
+        } catch (Exception ex) {
+            log.error("Could not read issues from the DB");
+        }
     }
 
     /**
-     * Initialize the issues table data
+     * Connect to the DB and get the unfinished issues.
+     *
+     * @return
      */
-    private void setTableData() {
+    private void getUnfinishedIssuesFromDB() {
+        try {
+            // ArrayList cast to ObservalbeList
+            data = FXCollections.observableArrayList(issueDao.findUnfinished());
+            log.debug("Get unfinished issues from DB" + data);
+        } catch (Exception ex) {
+            log.error("Could not read unfinished issues from the DB");
+        }
+    }
+
+
+    /**
+     * Set the common parts of the tables (Title, Details, Date created).
+     *
+     * @return Vector<TableColumn> Vector of TableColumns
+     */
+    private Vector<TableColumn> setTableCommonColumn() {
+        Vector<TableColumn> tableColumns = new Vector<>();
+
         TableColumn titleCol = new TableColumn("Title");
         titleCol.setMinWidth(100);
         // Ebben az oszlopban minden cellának textfield legyen a tartalma
@@ -108,12 +156,15 @@ public class IssuesController implements Initializable {
         // PropertyValueFactory<POJO neve, milyen típussal jelenítsük meg az értéket, amit ki akarunk venni>("milyen néven találja az értéket")
         titleCol.setCellValueFactory(new PropertyValueFactory<Issue, String>("title"));
 
-        // Táblázatban a címre kattintva módoítva mi történjen
+        // Táblázatban a címre kattintva módosítva mi történjen
         titleCol.setOnEditCommit(
-                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> ((Issue) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setTitle(t.getNewValue())
+                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> {
+                    Issue issue = (Issue) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                    issue.setTitle(t.getNewValue());
+                    issueDao.update(issue);
+                }
         );
+        tableColumns.add(titleCol);
 
         TableColumn detailsCol = new TableColumn("Details");
         detailsCol.setMinWidth(500);
@@ -122,10 +173,14 @@ public class IssuesController implements Initializable {
 
         // Táblázatban a detailre kattintva módoítva mi történjen
         detailsCol.setOnEditCommit(
-                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> ((Issue) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setDetails(t.getNewValue())
+                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> {
+                    Issue issue = (Issue) (t.getTableView().getItems().get(t.getTablePosition().getRow()));
+                    //issueDao.findByTitleAndDetails(issue.getTitle(), issue.getDetails()).get());
+                    issue.setDetails(t.getNewValue());
+                    issueDao.update(issue);
+                }
         );
+        tableColumns.add(detailsCol);
 
         TableColumn dateCreatedCol = new TableColumn("Date created");
         dateCreatedCol.setMinWidth(150);
@@ -136,11 +191,28 @@ public class IssuesController implements Initializable {
 
         // Táblázatban a címre kattintva módoítva mi történjen
         dateCreatedCol.setOnEditCommit(
-                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> ((Issue) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setTitle(t.getNewValue())
+                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> {
+                    Issue issue = (Issue) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                    issue.setDateCreated(t.getNewValue());
+                    issueDao.update(issue);
+                }
         );
+        tableColumns.add(dateCreatedCol);
 
+        return tableColumns;
+    }
+
+
+    /**
+     * Initialize the table which shows all of the issues.
+     * Set the columns and fill it with data from the database.
+     *
+     * @return
+     */
+    private void setAllIssuesTableData() {
+        Vector<TableColumn> tableColumns = setTableCommonColumn();
+
+        // We need one more column for the date of finished data
         TableColumn dateFinishedCol = new TableColumn("Date finished");
         dateFinishedCol.setMinWidth(150);
         // Ebben az oszlopban minden cellának textfield legyen a tartalma
@@ -150,18 +222,47 @@ public class IssuesController implements Initializable {
 
         // Táblázatban a címre kattintva módoítva mi történjen
         dateFinishedCol.setOnEditCommit(
-                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> ((Issue) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setTitle(t.getNewValue())
+                (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> {
+                    Issue issue = (Issue) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                    issue.setDateFinished(t.getNewValue());
+                    issueDao.update(issue);
+                }
         );
+        tableColumns.add(dateFinishedCol);
 
-        table.getColumns().addAll(titleCol, detailsCol, dateCreatedCol, dateFinishedCol);
-        table.setItems(data);
+        tableColumns.forEach((tableColumn ->
+                allIssueTable.getColumns().addAll(tableColumn)
+        ));
+
+        // Read data from DB and write it to the table
+        getAllIssuesFromDB();
+        allIssueTable.setItems(data);
+    }
+
+
+    /**
+     * Initialize the table which shows all of the issues where the finished date is empty.
+     * Set the columns and fill it with data from the database.
+     * Unfinished issue is where the finished date is empty.
+     *
+     * @return
+     */
+    private void setUnfinishedIssuesTableData() {
+        Vector<TableColumn> tableColumns = setTableCommonColumn();
+        tableColumns.forEach((tableColumn ->
+                unfinishedIssueTable.getColumns().addAll(tableColumn)
+                ));
+
+        getUnfinishedIssuesFromDB();
+
+        unfinishedIssueTable.setItems(data);
     }
 
 
     /**
      * Initialize the menu in the left side
+     *
+     * @return
      */
     private void setMenuData() {
         TreeItem<String> treeItemRoot1 = new TreeItem<>("Menu");
@@ -198,11 +299,11 @@ public class IssuesController implements Initializable {
                     if (selectedMenu == MENU_ISSUES) {
                         selectedItem.setExpanded(true);
                     } else if(selectedMenu ==  MENU_LIST) {
-                        unfinishedPane.setVisible(false);
-                        issuePane.setVisible(true);
+                        unfinishedIssuePane.setVisible(false);
+                        allIssuePane.setVisible(true);
                     } else if(selectedMenu ==  MENU_UNFINISHED) {
-                        issuePane.setVisible(false);
-                        unfinishedPane.setVisible(true);
+                        allIssuePane.setVisible(false);
+                        unfinishedIssuePane.setVisible(true);
                     } else if(selectedMenu ==  MENU_EXIT) {
                         System.exit(0);
                     }
@@ -212,13 +313,19 @@ public class IssuesController implements Initializable {
 
     }
 
+
+    /**
+     * Save an {@code Issue} to the database and display it in the tables.
+     *
+     * @param event
+     * @return
+     * @throws PersistenceException When could not save the {@code issue} in the database.
+     */
     @FXML
     private void saveIssue(ActionEvent event) {
         try {
             if (inputTitle.getText().length() > 3 &&  inputDetails.getText().length() > 3) {
                 // Mentjük az adatbázisba
-                Injector injector = Guice.createInjector(new PersistenceModule("jpa-persistence-unit-1"));
-                IssueDao issueDao = injector.getInstance(IssueDao.class);
                 Issue issue = new Issue(
                         1,
                         inputTitle.getText(),
@@ -231,20 +338,23 @@ public class IssuesController implements Initializable {
                 data.add(issue);
                 inputTitle.clear();
                 inputDetails.clear();
+            } else {
+                // TODO show a dialog with a message
             }
-        } catch(Exception ex) {
-            log.error("Failed to save issue to database.");
+        } catch(PersistenceException ex) {
+            log.error("Failed to save issue to the database." + ex);
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //issueDao = IssueDao.getInstance();
-
         //initDB();
-        readFromDB();
-        setTableData();
+
         setMenuData();
+
+        setAllIssuesTableData();
+
+        setUnfinishedIssuesTableData();
     }
 
 
