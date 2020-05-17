@@ -41,6 +41,12 @@
         <url>https://github.com/csgergo123/issue_tracker</url>
     </scm>
 
+    <inceptionYear>2020</inceptionYear>
+    <organization>
+        <name>DEIK</name>
+        <url>https://inf.unideb.hu</url>
+    </organization>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
