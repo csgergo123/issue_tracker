@@ -30,7 +30,6 @@ public class Issue {
      */
     @Column(nullable=false)
     private int createdBy;
-    // Azok a POJO-k amik SimpleStringProperty-vel rendelkeznek, ezek lesznek képesek kommunikálni az adatbázis táblával
 
     /**
      * The title of the issue.
@@ -214,11 +213,11 @@ public class Issue {
     /**
      * Check whether the issue is solved.
      *
-     * @param issue The {@link issue} entity.
      * @return {@code true} if the issue is solved (the finished date is not empty), {@code false} otherwise
      */
-    public Boolean isSolved(Issue issue) {
-        if(issue.getDateFinished() != null) {
+    public Boolean isSolved() {
+        if(this.getDateFinished() != null && !this.getDateFinished().isEmpty() && this.getDateFinished().length() >= 4) {
+            System.out.println(this.getDateFinished());
             return true;
         } else {
             return false;
