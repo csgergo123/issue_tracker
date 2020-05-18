@@ -40,7 +40,7 @@ public class IssueDao extends GenericJpaDao<Issue> {
     @Transactional
     public Optional<Issue> findByTitleAndDetails(String title, String details) {
         try {
-            return Optional.of(entityManager.createQuery("SELECT i FROM Issue i WHERE i.title  :title AND i.details = :details ORDER BY i.dateCreated", Issue.class)
+            return Optional.of(entityManager.createQuery("SELECT i FROM Issue i WHERE i.title = :title AND i.details = :details ORDER BY i.dateCreated", Issue.class)
                 .setParameter("title", title)
                 .setParameter("details", details)
                 .getSingleResult());

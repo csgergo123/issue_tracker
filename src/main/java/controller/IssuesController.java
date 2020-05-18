@@ -41,7 +41,7 @@ import guice.PersistenceModule;
 import javax.persistence.PersistenceException;
 
 /**
- * @author Csipkés Gergő
+ * @author Csipkes Gergo
  * @author csipkesgeri@gmail.com
  * @version 0.2
  *
@@ -50,7 +50,7 @@ import javax.persistence.PersistenceException;
 @Slf4j
 public class IssuesController implements Initializable {
     // Egy lista, ami objektumot tárol
-    // POJO (Issue objektumok
+    // POJO (Issue objektumok)
     /**
      * An ObservableList contains the {@link Issue}s.
      */
@@ -110,8 +110,6 @@ public class IssuesController implements Initializable {
 
     /**
      * Connect to the DB and get all issues.
-     *
-     * @return
      */
     private void getAllIssuesFromDB() {
         try {
