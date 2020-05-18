@@ -8,8 +8,9 @@
     <version>0.2</version>
 
     <description>
-        Beadandó projekt a Programozási technológiák és Programozási környezetek tárgyakra a Debreceni Egyetem Informatika karán.
-        A projekt egy Issue tracker alkalmazás, amiben a fejlesztők bejelentkezés után láthatják az adatbzisban lévő issuekat, felvihetnek újakat és módosíthatják azok státuszait.
+        An issue tracker example application with basic GUI.
+        The project written in JavaFX, used the MVC architecture and JPA for persistent data handling.
+        Users can add new issues to the database, modify their properties, set solved status and list all of the issues or just the unfinished ones.
     </description>
     <developers>
         <developer>
@@ -184,8 +185,8 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[1.7,)</version>
-                                    <message>JDK 7 or later is required!</message>
+                                    <version>[1.8,)</version>
+                                    <message>JDK 8 or later is required!</message>
                                 </requireJavaVersion>
                                 <requireProperty>
                                     <property>java.vendor</property>
