@@ -351,6 +351,12 @@ public class IssuesController implements Initializable {
     }
 
 
+    /**
+     * When a new issue creation called with not valid parameters this action runs.
+     * It set the other panes an opacity, disable them and display a pop up pane to inform the user about the error.
+     *
+     * @param event
+     */
     @FXML
     public void popupAlertPane(ActionEvent event) {
         alertPane.setVisible(false);
