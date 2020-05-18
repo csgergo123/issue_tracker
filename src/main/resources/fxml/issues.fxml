@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IssuesController">
+    <children>
+        <Label layoutX="560.0" layoutY="14.0" text="Issues" textFill="#002366">
+            <font>
+                <Font name="MathJax_Main-Bold" size="36.0" />
+            </font>
+        </Label>
+        <SplitPane dividerPositions="0.2230320699708455" layoutY="68.0" prefHeight="691.0" prefWidth="1215.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <StackPane id="menuPane" fx:id="menuPane" prefHeight="689.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="498.0" prefWidth="939.0">
+                    <children>
+                        <StackPane layoutX="14.0" layoutY="171.0" prefHeight="691.0" prefWidth="939.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Pane id="newIssuePane" fx:id="newIssuePane" prefHeight="571.0" prefWidth="939.0">
+                                    <children>
+                                        <TextField id="inputTitle" fx:id="inputTitle" layoutX="159.0" layoutY="524.0" prefHeight="25.0" prefWidth="287.0" promptText="Merge bugfix" />
+                                        <TextArea id="inputDetails" fx:id="inputDetails" layoutX="159.0" layoutY="565.0" prefHeight="77.0" prefWidth="287.0" promptText="When you click the merge button the db connection ..." />
+                                        <Label alignment="CENTER_RIGHT" layoutX="53.0" layoutY="528.0" prefHeight="17.0" prefWidth="36.0" text="Title" />
+                                        <Label alignment="CENTER_RIGHT" layoutX="53.0" layoutY="565.0" text="Details" />
+                                        <Button id="saveIssueButton" fx:id="saveIssueButton" layoutX="504.0" layoutY="585.0" mnemonicParsing="false" onAction="#saveIssue" prefHeight="38.0" prefWidth="71.0" text="Save" />
+                                    </children>
+                                </Pane>
+                            </children>
+                        </StackPane>
+                        <StackPane layoutX="14.0" layoutY="171.0" prefHeight="501.0" prefWidth="939.0" AnchorPane.bottomAnchor="188.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Pane id="unfinishedIssuePane" fx:id="unfinishedIssuePane" prefHeight="689.0" prefWidth="655.0" visible="false">
+                                    <children>
+                                        <TableView id="unfinishedIssueTable" fx:id="unfinishedIssueTable" editable="true" prefHeight="501.0" prefWidth="939.0">
+                                            <columns>
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </Pane>
+                                <Pane id="allIssuePane" fx:id="allIssuePane" prefHeight="635.0" prefWidth="647.0">
+                                    <children>
+                                        <TableView id="allIssueTable" fx:id="allIssueTable" editable="true" prefHeight="501.0" prefWidth="939.0">
+                                            <columns>
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </Pane>
+                            </children>
+                        </StackPane>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</Pane>
