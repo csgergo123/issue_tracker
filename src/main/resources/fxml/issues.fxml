@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -13,11 +14,16 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="1215.0" style="-fx-background-color: #3a97e8;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IssuesController">
     <children>
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="439.0" layoutY="-3.0" prefHeight="71.0" prefWidth="338.0" text="Issue tracker" textFill="WHITE">
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="551.0" layoutY="2.0" prefHeight="71.0" prefWidth="208.0" text="Issue tracker" textFill="WHITE">
             <font>
                 <Font name="MathJax_Main-Bold" size="36.0" />
             </font>
         </Label>
+      <ImageView fitHeight="46.0" fitWidth="65.0" layoutX="500.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/icons/beetle.png" />
+         </image>
+      </ImageView>
         <SplitPane dividerPositions="0.2230320699708455" layoutY="68.0" prefHeight="691.0" prefWidth="1215.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
