@@ -42,7 +42,7 @@ import javax.persistence.PersistenceException;
 
 /**
  * @author Csipkés Gergő
- * @email csipkesgeri@gmail.com
+ * @author csipkesgeri@gmail.com
  * @version 0.2
  *
  * This class is the controller of the {@link Issue} and the {@code issues.xml}.
@@ -98,8 +98,6 @@ public class IssuesController implements Initializable {
     /**
      * This function is for test purpose.
      * Connect to the DB and create an issue.
-     *
-     * @return
      */
     private void initDB() {
         Issue issue = createIssue();
@@ -127,8 +125,6 @@ public class IssuesController implements Initializable {
 
     /**
      * Connect to the DB and get the unfinished issues.
-     *
-     * @return
      */
     private void getUnfinishedIssuesFromDB() {
         try {
@@ -206,8 +202,6 @@ public class IssuesController implements Initializable {
     /**
      * Initialize the table which shows all of the issues.
      * Set the columns and fill it with data from the database.
-     *
-     * @return
      */
     private void setAllIssuesTableData() {
         Vector<TableColumn> tableColumns = setTableCommonColumn();
@@ -244,8 +238,6 @@ public class IssuesController implements Initializable {
      * Initialize the table which shows all of the issues where the finished date is empty.
      * Set the columns and fill it with data from the database.
      * Unfinished issue is where the finished date is empty.
-     *
-     * @return
      */
     private void setUnfinishedIssuesTableData() {
         Vector<TableColumn> tableColumns = setTableCommonColumn();
@@ -260,9 +252,7 @@ public class IssuesController implements Initializable {
 
 
     /**
-     * Initialize the menu in the left side
-     *
-     * @return
+     * Initialize the menu in the left side.
      */
     private void setMenuData() {
         TreeItem<String> treeItemRoot1 = new TreeItem<>("Menu");
@@ -318,7 +308,6 @@ public class IssuesController implements Initializable {
      * Save an {@code Issue} to the database and display it in the tables.
      *
      * @param event
-     * @return
      * @throws PersistenceException When could not save the {@code issue} in the database.
      */
     @FXML

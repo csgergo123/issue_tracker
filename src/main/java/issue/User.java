@@ -1,6 +1,8 @@
 package issue;
 
-/** Represents a User (base class)
+/**
+ * Represents a User (base class).
+ *
  * @author Csipkes Gergo
  * @author csipkesgeri@gmail.com
  * @version 0.1
@@ -10,13 +12,20 @@ public class User {
     protected String firstName;
     protected String lastName;
 
+    /**
+     * Create a {@code user} entity.
+     *
+     * @param firstName First name of the user.
+     * @param lastName Last name of the user.
+     */
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
     /**
-     * Get the User's ID.s
+     * Get the User's ID.
+     *
      * @return An int with the User ID.
      */
     public int getId() {
@@ -25,6 +34,7 @@ public class User {
 
     /**
      * Set the User's ID.
+     *
      * @param id An int with the User ID.
      */
     public void setId(int id) {
@@ -33,6 +43,7 @@ public class User {
 
     /**
      * Get the User's first name.
+     *
      * @return firstName A string with the User's first name.
      */
     public String getFirstName() {
@@ -41,6 +52,7 @@ public class User {
 
     /**
      * Set the User's first name.
+     *
      * @param firstName A string with the User's first name.
      */
     public void setFirstName(String firstName) {
@@ -49,6 +61,7 @@ public class User {
 
     /**
      * Get the User's last name.
+     *
      * @return lastName A string with the User's last name.
      */
     public String getLastName() {
@@ -65,10 +78,12 @@ public class User {
 
     /**
      * Adds a new Issue to the user.
+     *
      * @param userID An int with the User's ID.
      * @param title A string with the issue's title.
      * @param text A string with the issue's text.
      * @param dateCreated A String with the creation time of the issue.
+     *
      * @return The created Issue model.
      */
     protected Issue addIssue(int userID, String title, String text, String dateCreated) {
@@ -83,6 +98,7 @@ public class User {
      * @param userID An int with the User's ID.
      * @param title A string with the issue's title.
      * @param text A string with the issue's text.
+     *
      * @return The created Issue model.
      */
     // Instead of optional operator

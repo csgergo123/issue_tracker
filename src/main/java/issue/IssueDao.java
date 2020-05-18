@@ -32,8 +32,9 @@ public class IssueDao extends GenericJpaDao<Issue> {
     /**
      * Optionally returns an issue with the given title and details.
      *
-     * @param title
-     * @param details
+     * @param title The title of the issue.
+     * @param details The details of the issue.
+     *
      * @return Issue (optional) returns an issue with the given title and details.
      */
     @Transactional

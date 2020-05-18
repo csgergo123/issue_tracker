@@ -1,4 +1,4 @@
 /**
- * Defines the controller of the Issues.
+ * Defines the basic JPA.
  */
-package controller;
+package jpa;
