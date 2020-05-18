@@ -13,6 +13,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -79,11 +80,18 @@ public class IssuesController implements Initializable {
     TableView allIssueTable;
 
     @FXML
+    Pane newIssuePane;
+    @FXML
     TextField inputTitle;
     @FXML
     TextArea inputDetails;
     @FXML
     Button saveIssueButton;
+
+    @FXML
+    Pane alertPane;
+    @FXML
+    Button alertButton;
 
     /**
      * This function is for test purpose.
@@ -326,12 +334,34 @@ public class IssuesController implements Initializable {
                 inputTitle.clear();
                 inputDetails.clear();
             } else {
+                System.out.println("HIBA");
+                alertPane.setVisible(true);
+                allIssuePane.setDisable(true);
+                unfinishedIssuePane.setDisable(true);
+                menuPane.setDisable(true);
+                newIssuePane.setDisable(true);
+                allIssuePane.setOpacity(30);
+                unfinishedIssuePane.setOpacity(30);
+                menuPane.setOpacity(30);
                 // TODO show a dialog with a message
             }
         } catch(PersistenceException ex) {
             log.error("Failed to save issue to the database." + ex);
         }
     }
+
+
+    @FXML
+    public void popupAlertPane(ActionEvent event) {
+        alertPane.setVisible(false);
+        allIssuePane.setDisable(false);
+        unfinishedIssuePane.setDisable(false);
+        menuPane.setDisable(false);
+        newIssuePane.setDisable(false);
+        allIssuePane.setOpacity(100);
+        unfinishedIssuePane.setOpacity(100);
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

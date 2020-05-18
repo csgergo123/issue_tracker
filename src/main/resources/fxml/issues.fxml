@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -10,9 +11,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IssuesController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="1215.0" style="-fx-background-color: #3a97e8;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.IssuesController">
     <children>
-        <Label layoutX="560.0" layoutY="14.0" text="Issues" textFill="#002366">
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="439.0" layoutY="-3.0" prefHeight="71.0" prefWidth="338.0" text="Issue tracker" textFill="WHITE">
             <font>
                 <Font name="MathJax_Main-Bold" size="36.0" />
             </font>
@@ -24,22 +25,9 @@
                         <StackPane id="menuPane" fx:id="menuPane" prefHeight="689.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     </children>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="498.0" prefWidth="939.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="645.0" prefWidth="922.0">
                     <children>
-                        <StackPane layoutX="14.0" layoutY="171.0" prefHeight="691.0" prefWidth="939.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                            <children>
-                                <Pane id="newIssuePane" fx:id="newIssuePane" prefHeight="571.0" prefWidth="939.0">
-                                    <children>
-                                        <TextField id="inputTitle" fx:id="inputTitle" layoutX="159.0" layoutY="524.0" prefHeight="25.0" prefWidth="287.0" promptText="Merge bugfix" />
-                                        <TextArea id="inputDetails" fx:id="inputDetails" layoutX="159.0" layoutY="565.0" prefHeight="77.0" prefWidth="287.0" promptText="When you click the merge button the db connection ..." />
-                                        <Label alignment="CENTER_RIGHT" layoutX="53.0" layoutY="528.0" prefHeight="17.0" prefWidth="36.0" text="Title" />
-                                        <Label alignment="CENTER_RIGHT" layoutX="53.0" layoutY="565.0" text="Details" />
-                                        <Button id="saveIssueButton" fx:id="saveIssueButton" layoutX="504.0" layoutY="585.0" mnemonicParsing="false" onAction="#saveIssue" prefHeight="38.0" prefWidth="71.0" text="Save" />
-                                    </children>
-                                </Pane>
-                            </children>
-                        </StackPane>
-                        <StackPane layoutX="14.0" layoutY="171.0" prefHeight="501.0" prefWidth="939.0" AnchorPane.bottomAnchor="188.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <StackPane layoutX="14.0" layoutY="-2.0" prefHeight="500.0" prefWidth="939.0" AnchorPane.bottomAnchor="189.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
                                 <Pane id="unfinishedIssuePane" fx:id="unfinishedIssuePane" prefHeight="689.0" prefWidth="655.0" visible="false">
                                     <children>
@@ -59,6 +47,43 @@
                                 </Pane>
                             </children>
                         </StackPane>
+                        <StackPane layoutY="502.0" prefHeight="187.0" prefWidth="939.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="502.0">
+                     <children>
+                                <Pane id="newIssuePane" fx:id="newIssuePane" style="-fx-background-color: #3a97e8;">
+                           <children>
+                              <TextField id="inputTitle" fx:id="inputTitle" layoutX="54.0" layoutY="25.0" prefHeight="31.0" prefWidth="514.0" promptText="Title">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextField>
+                              <TextArea id="inputDetails" fx:id="inputDetails" layoutX="54.0" layoutY="68.0" prefHeight="101.0" prefWidth="514.0" promptText="Some details">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextArea>
+                              <Button id="saveIssueButton" fx:id="saveIssueButton" layoutX="689.0" layoutY="64.0" mnemonicParsing="false" onAction="#saveIssue" prefHeight="59.0" prefWidth="128.0" text="Save">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                                </Pane>
+                     </children>
+                        </StackPane>
+                  <Pane id="alertPane" fx:id="alertPane" layoutX="92.0" layoutY="193.0" prefHeight="304.0" prefWidth="538.0" style="-fx-background-color: #ededed; -fx-border-color: #8a8787; -fx-border-width: 4px;" visible="false">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="73.0" layoutY="81.0" prefHeight="71.0" prefWidth="392.0" text="Write a valid title and detail. At least 3 characer each.">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Button id="alertButton" fx:id="alertButton" layoutX="210.0" layoutY="181.0" mnemonicParsing="false" onAction="#popupAlertPane" prefHeight="53.0" prefWidth="118.0" text="Okay I see.">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
                     </children>
                 </AnchorPane>
             </items>
