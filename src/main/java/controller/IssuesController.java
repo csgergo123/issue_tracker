@@ -161,6 +161,7 @@ public class IssuesController implements Initializable {
                     try {
                         issue.setTitle(t.getNewValue());
                         issueDao.update(issue);
+                        log.debug("The title of the issue has been updated: " + issue.toString());
                     } catch (Exception ex) {
                         log.error("The update of the issue was failed." + issue.toString());
                     }
@@ -180,6 +181,7 @@ public class IssuesController implements Initializable {
                     try {
                         issue.setDetails(t.getNewValue());
                         issueDao.update(issue);
+                        log.debug("The details of the issue has been updated: " + issue.toString());
                     } catch (Exception ex) {
                         log.error("The update of the issue was failed." + issue.toString());
                     }
@@ -201,6 +203,7 @@ public class IssuesController implements Initializable {
                     try {
                         issue.setDateCreated(t.getNewValue());
                         issueDao.update(issue);
+                        log.debug("The creation date of the issue has been updated: " + issue.toString());
                     } catch (Exception ex) {
                         log.error("The update of the issue was failed." + issue.toString());
                     }
@@ -235,6 +238,7 @@ public class IssuesController implements Initializable {
                         issue.setDateFinished(t.getNewValue());
                         issueDao.update(issue);
                         unfinishedIssues.remove(issue);
+                        log.debug("The finished date of the issue has been updated: " + issue.toString());
                     } catch (Exception ex) {
                         issue.setDateFinished(t.getOldValue());
                         log.error("The update of the issue was failed." + issue.toString());
@@ -357,7 +361,6 @@ public class IssuesController implements Initializable {
                 allIssuePane.setOpacity(30);
                 unfinishedIssuePane.setOpacity(30);
                 menuPane.setOpacity(30);
-                // TODO show a dialog with a message
             }
         } catch(PersistenceException ex) {
             log.error("Failed to save issue to the database." + ex);
