@@ -5,7 +5,7 @@
     <groupId>hu.unideb.inf</groupId>
     <artifactId>CsipkesGergo_Y9OL7D_ProgTech_Beadando</artifactId>
     <packaging>jar</packaging>
-    <version>0.2</version>
+    <version>0.3</version>
 
     <description>
         An issue tracker example application with basic GUI.

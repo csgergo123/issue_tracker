@@ -1,7 +1,6 @@
 package controller;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -13,7 +12,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,7 +20,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
@@ -33,10 +30,6 @@ import javafx.scene.image.ImageView;
 import issue.Issue;
 import lombok.extern.slf4j.Slf4j;
 
-import com.google.common.collect.Lists;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-
 import guice.PersistenceModule;
 
 import javax.persistence.PersistenceException;
@@ -44,7 +37,7 @@ import javax.persistence.PersistenceException;
 /**
  * @author Csipkes Gergo
  * @author csipkesgeri@gmail.com
- * @version 0.2
+ * @version 0.3
  *
  * This class is the controller of the {@link Issue} and the {@code issues.xml}.
  */
@@ -118,7 +111,7 @@ public class IssuesController implements Initializable {
         log.info("A new issue is save to the database" + issue);
     }
 
-    
+
     /**
      * Connect to the DB and get all issues.
      */

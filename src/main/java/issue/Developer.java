@@ -5,7 +5,7 @@ package issue;
  *
  * @author Csipkes Gergo
  * @author csipkesgeri@gmail.com
- * @version 0.1
+ * @version 0.3
  */
 public class Developer extends User {
     private String position;

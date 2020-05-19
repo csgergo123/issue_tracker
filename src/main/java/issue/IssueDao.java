@@ -1,12 +1,9 @@
 package issue;
 
 import com.google.inject.persist.Transactional;
-import issue.Issue;
 import jpa.GenericJpaDao;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +13,7 @@ import java.util.Optional;
  *
  * @author Csipkes Gergo
  * @author csipkesgeri@gmail.com
- * @version 0.2
+ * @version 0.3
  */
 public class IssueDao extends GenericJpaDao<Issue> {
     /**

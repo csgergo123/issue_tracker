@@ -1,7 +1,5 @@
 package issue;
 
-import javafx.beans.property.SimpleStringProperty;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -11,7 +9,7 @@ import javax.persistence.*;
  *
  * @author Csipkes Gergo
  * @author csipkesgeri@gmail.com
- * @version 0.2
+ * @version 0.3
  */
 @Data
 @SuperBuilder
