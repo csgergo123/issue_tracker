@@ -55,7 +55,8 @@ public class IssuesController implements Initializable {
     /**
      * An ObservableList contains the {@link Issue}s.
      */
-    private ObservableList<Issue> data = FXCollections.observableArrayList();
+    private ObservableList<Issue> allIssues = FXCollections.observableArrayList();
+    private ObservableList<Issue> unfinishedIssues = FXCollections.observableArrayList();
 
     private final String MENU_ISSUES = "Issues";
     private final String MENU_LIST = "All issues";
@@ -112,18 +113,20 @@ public class IssuesController implements Initializable {
         issueDao.persist(issue);
         issueDao.persist(issue);
         issueDao.persist(issue);
-        data.add(issue);
+        allIssues.add(issue);
+        unfinishedIssues.add(issue);
         log.info("A new issue is save to the database" + issue);
     }
 
+    
     /**
      * Connect to the DB and get all issues.
      */
     private void getAllIssuesFromDB() {
         try {
             // ArrayList cast to ObservalbeList
-            data = FXCollections.observableArrayList(issueDao.findAll());
-            log.debug("Get all issues from DB" + data);
+            allIssues = FXCollections.observableArrayList(issueDao.findAll());
+            log.debug("Get all issues from DB" + allIssues);
         } catch (Exception ex) {
             log.error("Could not read issues from the DB");
         }
@@ -135,8 +138,8 @@ public class IssuesController implements Initializable {
     private void getUnfinishedIssuesFromDB() {
         try {
             // ArrayList cast to ObservalbeList
-            data = FXCollections.observableArrayList(issueDao.findUnfinished());
-            log.debug("Get unfinished issues from DB" + data);
+            unfinishedIssues = FXCollections.observableArrayList(issueDao.findUnfinished());
+            log.debug("Get unfinished issues from DB" + unfinishedIssues);
         } catch (Exception ex) {
             log.error("Could not read unfinished issues from the DB");
         }
@@ -162,8 +165,12 @@ public class IssuesController implements Initializable {
         titleCol.setOnEditCommit(
                 (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> {
                     Issue issue = (Issue) t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    issue.setTitle(t.getNewValue());
-                    issueDao.update(issue);
+                    try {
+                        issue.setTitle(t.getNewValue());
+                        issueDao.update(issue);
+                    } catch (Exception ex) {
+                        log.error("The update of the issue was failed." + issue.toString());
+                    }
                 }
         );
         tableColumns.add(titleCol);
@@ -177,9 +184,12 @@ public class IssuesController implements Initializable {
         detailsCol.setOnEditCommit(
                 (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> {
                     Issue issue = (Issue) (t.getTableView().getItems().get(t.getTablePosition().getRow()));
-                    //issueDao.findByTitleAndDetails(issue.getTitle(), issue.getDetails()).get());
-                    issue.setDetails(t.getNewValue());
-                    issueDao.update(issue);
+                    try {
+                        issue.setDetails(t.getNewValue());
+                        issueDao.update(issue);
+                    } catch (Exception ex) {
+                        log.error("The update of the issue was failed." + issue.toString());
+                    }
                 }
         );
         tableColumns.add(detailsCol);
@@ -191,12 +201,16 @@ public class IssuesController implements Initializable {
         // PropertyValueFactory<POJO neve, milyen típussal jelenítsük meg az értéket, amit ki akarunk venni>("milyen néven találja az értéket")
         dateCreatedCol.setCellValueFactory(new PropertyValueFactory<Issue, String>("dateCreated"));
 
-        // Táblázatban a címre kattintva módoítva mi történjen
+        // Táblázatban a Date createdre kattintva módosítva mi történjen
         dateCreatedCol.setOnEditCommit(
                 (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> {
                     Issue issue = (Issue) t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    issue.setDateCreated(t.getNewValue());
-                    issueDao.update(issue);
+                    try {
+                        issue.setDateCreated(t.getNewValue());
+                        issueDao.update(issue);
+                    } catch (Exception ex) {
+                        log.error("The update of the issue was failed." + issue.toString());
+                    }
                 }
         );
         tableColumns.add(dateCreatedCol);
@@ -220,12 +234,19 @@ public class IssuesController implements Initializable {
         // PropertyValueFactory<POJO neve, milyen típussal jelenítsük meg az értéket, amit ki akarunk venni>("milyen néven találja az értéket")
         dateFinishedCol.setCellValueFactory(new PropertyValueFactory<Issue, String>("dateFinished"));
 
-        // Táblázatban a címre kattintva módoítva mi történjen
+        // Táblázatban a Date finishedre kattintva módosítva mi történjen
         dateFinishedCol.setOnEditCommit(
                 (EventHandler<TableColumn.CellEditEvent<Issue, String>>) t -> {
                     Issue issue = (Issue) t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    issue.setDateFinished(t.getNewValue());
-                    issueDao.update(issue);
+                    try {
+                        issue.setDateFinished(t.getNewValue());
+                        issueDao.update(issue);
+                        unfinishedIssues.remove(issue);
+                    } catch (Exception ex) {
+                        issue.setDateFinished(t.getOldValue());
+                        log.error("The update of the issue was failed." + issue.toString());
+                    }
+
                 }
         );
         tableColumns.add(dateFinishedCol);
@@ -236,7 +257,7 @@ public class IssuesController implements Initializable {
 
         // Read data from DB and write it to the table
         getAllIssuesFromDB();
-        allIssueTable.setItems(data);
+        allIssueTable.setItems(allIssues);
     }
 
 
@@ -253,7 +274,7 @@ public class IssuesController implements Initializable {
 
         getUnfinishedIssuesFromDB();
 
-        unfinishedIssueTable.setItems(data);
+        unfinishedIssueTable.setItems(unfinishedIssues);
     }
 
 
@@ -330,11 +351,11 @@ public class IssuesController implements Initializable {
                 log.info("A new issue is save to the database" + issue);
 
                 // Hozzáadjuk az ObservableList-hez
-                data.add(issue);
+                allIssues.add(issue);
+                unfinishedIssues.add(issue);
                 inputTitle.clear();
                 inputDetails.clear();
             } else {
-                System.out.println("HIBA");
                 alertPane.setVisible(true);
                 allIssuePane.setDisable(true);
                 unfinishedIssuePane.setDisable(true);
